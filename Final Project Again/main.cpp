@@ -102,7 +102,8 @@ void ViewEmployees(vector<Employee> employees) {
 	cout << endl;
 }
 
-bool CanRemoveEmployee(vector<Employee> employees, Employee employee) {
+//Checks if there is more than one manager. If so, allow them to change their role to a nonmanager position
+bool CanEditEmployeeJob(vector<Employee> employees, Employee employee) {
 	if (employee.getRole() == "Manager") {
 
 	int count = 0;
@@ -191,10 +192,16 @@ void EditEmployees(vector<Employee> employees, string editOrRemove, Employee use
 			}
 			else if (input == "3") {
 				//Change the job [or role] of the account of index chosen by user
-				string job;
-				cout << "Enter the new job: " << endl;
-				cin >> job;
-				employees[index].setRole(job);
+				if (employees[index].getID() != user.getID()) {
+					string job;
+					cout << "Enter the new job: " << endl;
+					cin >> job;
+					employees[index].setRole(job);
+				}
+				else {
+					cout << "You cannot change your own job. Please ask another manager." << endl;
+					return;
+				}
 			}
 			else if (input == "4") {
 				string id;
@@ -209,10 +216,16 @@ void EditEmployees(vector<Employee> employees, string editOrRemove, Employee use
 				employees[index].setID(id);
 			}
 			else if (input == "5") {
-				string salary;
-				cout << "Enter the new salary: " << endl;
-				cin >> salary;
-				employees[index].setSalary(salary);
+				if (employees[index].getID() != user.getID()) {
+					string salary;
+					cout << "Enter the new salary: " << endl;
+					cin >> salary;
+					employees[index].setSalary(salary);
+				}
+				else {
+					cout << "You cannot change your own salary. Please ask another manager." << endl;
+					return;
+				}
 			}
 			else {
 				//if user chooses other invalid input, let them know, and break out of method
@@ -245,6 +258,7 @@ void EditEmployees(vector<Employee> employees, string editOrRemove, Employee use
 		}
 		else {
 			cout << "Invalid operation. Cannot remove yourself." << endl;
+			return;
 		}
 		//Once employee is edited or removed, rewrite the file with new data
 		OverwriteSaveFile(employees);
@@ -313,7 +327,7 @@ void setSchedule(vector<Employee> employees) {
 			cin >> hours;
 			break;
 		default:
-			cout << "Invalid input" << endl;
+			cout << "Invalid input." << endl;
 			break;
 		}
 
@@ -383,7 +397,7 @@ vector<Employee> LoadEmployees() {
 		cin >> firstName >> lastName;
 		name += firstName + " " + lastName;
 		system("CLS");
-		cout << "I assume that you are the manager of this corporation, please create a password" << endl;
+		cout << "I assume that you are the manager of this corporation, please create a password:" << endl;
 		role = "Manager";
 		do {
 			cin >> password;
@@ -392,9 +406,9 @@ vector<Employee> LoadEmployees() {
 			}
 		} while (password.length() < 4);
 		system("CLS");
-		cout << "Perfect!, What will be your ID?" << endl;
+		cout << "Perfect! What will be your ID?" << endl;
 		cin >> id;
-		cout << "Enter the salary" << endl;
+		cout << "Enter your salary:" << endl;
 		cin >> salary;
 		system("CLS");
 		srand(time(0));
