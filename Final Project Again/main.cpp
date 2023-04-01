@@ -7,6 +7,7 @@
 #include <iomanip>
 //stdlib.h for changing colour of terminal and text (purely cosmetic)
 #include <stdlib.h>
+#include "Employee.h"
 using namespace std;
 /*
 * View Schedule
@@ -21,90 +22,6 @@ using namespace std;
 void MainLoop();
 
 //simple class for testing purposes -> probably needs to be expanded with more data fields, functions, and expanded into more inherited classes
-class Employee {
-	string id;
-	string password;
-	string name;
-	string role;
-	string salary;
-	string schedule[7] = { "X", "X", "X", "X","X","X","X" };
-public:
-	//constructor for data fields
-	Employee(string id, string password, string name, string role, string schedule[7], string salary) {
-		this->id = id;
-		this->password = password;
-		this->name = name;
-		this->role = role;
-		for (int i = 0; i < 7; i++) {
-			this->schedule[i] = schedule[i];
-		}
-		this->salary = salary;
-
-	}
-
-	Employee(string id, string password, string name, string role, string salary) {
-		this->id = id;
-		this->password = password;
-		this->name = name;
-		this->role = role;
-		this->salary = salary;
-	}
-	//default constructor with blank datafields
-	Employee() {
-		id = "";
-		password = "";
-		name = "";
-		role = "";
-	}
-
-	//setters and getters for data fields
-	void setID(string id) {
-		this->id = id;
-	}
-
-	void setName(string name) {
-		this->name = name;
-	}
-
-	void setRole(string role) {
-		this->role = role;
-	}
-
-	void setPassword(string password) {
-		this->password = password;
-	}
-
-	void setSalary(string salary) {
-		this->salary = salary;
-	}
-	void setSchedule(int day, string hours) {
-		schedule[day] = hours;
-		cout << "Setted the day: " << day << " hours: " << hours << endl;
-	}
-
-	string getSchedule(int day) {
-		return schedule[day];
-	}
-
-	string getID() {
-		return id;
-	}
-
-	string getName() {
-		return name;
-	}
-
-	string getRole() {
-		return role;
-	}
-
-	string getPassword() {
-		return password;
-	}
-	string getSalary() {
-		return salary;
-	}
-};
 
 bool isIDTaken(vector<Employee> employees, string id) {
 	for (int i = 0; i < employees.size(); i++) {
@@ -601,8 +518,8 @@ int getIndex(vector<Employee> employees, string id) {
 void DisplayEmployeeInformation(Employee employee) {
 	system("CLS");
 	cout << setw(55) << "Information" << endl;
-	cout << setw(10) << "ID" << setw(25) << "Name" << setw(28) << "Password" << setw(24) << "Role" << endl;
-	cout << setw(10) << employee.getID() << setw(25) << employee.getName() << setw(28) << employee.getPassword() << setw(24) << employee.getRole() << endl;
+	cout << setw(10) << "ID" << setw(25) << "Name" << setw(28) << "Password" << setw(24) << "Role" <<  setw(26) << "Salary/h" << endl;
+	cout << setw(10) << employee.getID() << setw(25) << employee.getName() << setw(28) << employee.getPassword() << setw(24) << employee.getRole() <<  setw(26) << employee.getSalary() << endl;
 }
 
 //main loop that all other functions are childed to
