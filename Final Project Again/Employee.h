@@ -28,6 +28,7 @@ public:
 	void setPassword(string password);
 
 	void setSalary(string salary);
+
 	void setSchedule(int day, string hours);
 
 	string getSchedule(int day);
@@ -37,6 +38,8 @@ public:
 	string getName();
 
 	string getRole();
+
 	string getPassword();
+
 	string getSalary();
 };

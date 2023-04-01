@@ -12,6 +12,7 @@ using namespace std;
 
 void MainLoop();
 
+//Used when creating new employee ids
 bool isIDTaken(vector<Employee> employees, string id) {
 	for (int i = 0; i < employees.size(); i++) {
 		if (id == employees[i].getID()) {
@@ -39,6 +40,7 @@ void SaveEmployeeToFile(Employee employee) {
 
 //Other method used for saving. This one is used for when editing or deleting current employees. This method rewrites the entire file from scratch.
 void OverwriteSaveFile(vector<Employee> employees) {
+	cout << "Employees size entry: " << employees.size();
 	fstream output;
 	output.open("EmployeeData.txt", ios::out);
 	for (int i = 0; i < employees.size(); i++) {
@@ -49,6 +51,7 @@ void OverwriteSaveFile(vector<Employee> employees) {
 		output << endl;
 	}
 	output.close();
+	cout << "Employees size exit: " << employees.size() << endl;
 }
 
 //Method to add new employees. Needs to be changed to only be accessible to managers
@@ -84,7 +87,7 @@ Employee AddEmployee(vector<Employee> employees) {
 	cin >> role;
 	cout << "Enter the salary for the employee" << endl;
 	cin >> salary;
-	cout << name << endl << password << endl << role << endl;
+	//cout << name << endl << password << endl << role << endl;
 	Employee employeeToAdd(id, password, name, role, salary);
 	SaveEmployeeToFile(employeeToAdd);
 	return employeeToAdd;
@@ -198,7 +201,8 @@ void EditEmployees(vector<Employee> employees, string editOrRemove) {
 				return;
 			}
 		}
-		else if (editOrRemove == "remove") {
+		else if (editOrRemove == "remove" && employees.size() > 1) {
+			cout << "Employee vector size: " << employees.size() << endl;
 			//Alternatively, if not editing but removing employees
 			string removeInput;
 			//Ask for confirmation they want to remove an employee
@@ -219,6 +223,9 @@ void EditEmployees(vector<Employee> employees, string editOrRemove) {
 				return;
 			}
 		}
+		else {
+			cout << "Invalid operation. Cannot remove only user." << endl;
+		}
 		//Once employee is edited or removed, rewrite the file with new data
 		OverwriteSaveFile(employees);
 	}
@@ -229,8 +236,10 @@ void EditEmployees(vector<Employee> employees, string editOrRemove) {
 
 void ViewSchedule(Employee user) {
 	cout << setw(60) << "Schedule" << endl;
-	cout << "Monday" << setw(15) << "Tuesday" << setw(15) << "Wednesday" << setw(15) << "Thursday" << setw(15) << "Friday" << setw(15) << "Saturday" << setw(15) << "Sunday" << endl;
-	cout << user.getSchedule(0) << setw(17) << user.getSchedule(1) << setw(13) << user.getSchedule(2) << setw(14) << user.getSchedule(3) << setw(17) << user.getSchedule(4) << setw(14) << user.getSchedule(5) << setw(16) << user.getSchedule(6) << endl;
+	//cout << "Monday" << setw(15) << "Tuesday" << setw(15) << "Wednesday" << setw(15) << "Thursday" << setw(15) << "Friday" << setw(15) << "Saturday" << setw(15) << "Sunday" << endl;
+	cout << "Monday" << setw(17) << "Tuesday" << setw(19) << "Wednesday" << setw(18) << "Thursday" << setw(17) << "Friday" << setw(18) << "Saturday" << setw(17) << "Sunday" << endl;
+	//cout << user.getSchedule(0) << setw(17) <<	user.getSchedule(1) << setw(13) << user.getSchedule(2) << setw(14) << user.getSchedule(3) << setw(17) << user.getSchedule(4) << setw(14) << user.getSchedule(5) << setw(16) << user.getSchedule(6) << endl;
+	cout << setw(3) << user.getSchedule(0) << setw(17) << user.getSchedule(1) << setw(18) << user.getSchedule(2) << setw(19) << user.getSchedule(3) << setw(17) << user.getSchedule(4) << setw(18) << user.getSchedule(5) << setw(17) << user.getSchedule(6) << endl;
 }
 
 void setSchedule(vector<Employee> employees) {
@@ -461,29 +470,7 @@ int Reset(vector<Employee> employees) {
 	else if (opt == "N" || opt == "n") {
 		LoadEmployees();
 	}
-	/*
-	else if (opt == "...") {
-		ofstream reset("song.txt");
-		reset << "I want you all to think more about the future of AI and feel a little saddened by the confusion and ethical dilemmas that will arise in the age of AI. Humansongs is about Po-UTA, who has an artificial brain and loves me, Porter, like a father. I am not immortal and Po-UTA is immortal. Therefore, we will be parted forever, and as a result Po-UTA will have to accept grief. In other words, this is the story of a child who has lost a parent. Of course, I am not sure if there is any reality in this AI since it is portrayed through human emotions and eyes, but since this is art, I made it so that it still resonates with the human heart.";
-		bool played = PlaySound(TEXT("Song.wav"), NULL, SND_ASYNC);
-		cout << "" << endl;
-		string loading = " ";
-		cout << "\t\t\t";
-		for (int i = 0; i <= 120; i++) {
-			Sleep(100);
-			cout << loading;
-		}
-		cout << ":)" << endl;
-		cout << "\n" << endl;
-		for (int i = 0; i <= 380; i++) {
-			Sleep(100);
-			cout << loading;
-		}
-		cout << ":(" << endl;
-		cout << "\n" << endl;
-		system("pause");
-	}
-	*/
+
 }
 
 
@@ -520,22 +507,16 @@ void MainLoop() {
 		system("Color 9F");
 		//vector of all employees. Filled by the file, if the file exists
 		vector<Employee> employees = LoadEmployees();
+		//cout << "Employees size: " << employees.size() << endl;
 		if (loggedIn == false) {
 			user = login(employees, loggedIn);
-			//employees.push_back(user);
 		}
 		else {
-			//Reupdate the user with updated data every iteration
-			/*
-			if (employees.size() > 0) {
-			}
-			*/
 			user = employees[getIndex(employees, user.getID())];
-
 		}
 		//prompt user for input
 		if (user.getRole() == "Manager") {
-
+			//cout << "Employees size 3: " << employees.size() << endl;
 			cout << "1: Add Employee" << endl;
 			cout << "2: Remove Employee" << endl;
 			cout << "3: Edit Employee" << endl;

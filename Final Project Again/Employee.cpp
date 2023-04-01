@@ -34,6 +34,7 @@ using namespace std;
 		password = "";
 		name = "";
 		role = "";
+		salary = "";
 	}
 
 	//setters and getters for data fields
