@@ -102,8 +102,27 @@ void ViewEmployees(vector<Employee> employees) {
 	cout << endl;
 }
 
+bool CanRemoveEmployee(vector<Employee> employees, Employee employee) {
+	if (employee.getRole() == "Manager") {
+
+	int count = 0;
+	for (int i = 0; i < employees.size(); i++) {
+		if (employees[i].getRole() == "Manager") {
+			count++;
+			if (count > 1) {
+				return true;
+			}
+		}
+	}
+	return false;
+	}
+	else {
+		return true;
+	}
+}
+
 //Used for both editing and deleting employees. Whether editing or removing is decided from the 'editOrRemove' parameter
-void EditEmployees(vector<Employee> employees, string editOrRemove) {
+void EditEmployees(vector<Employee> employees, string editOrRemove, Employee user) {
 	string id;
 	int index;
 	bool found = false;
@@ -128,6 +147,8 @@ void EditEmployees(vector<Employee> employees, string editOrRemove) {
 			break;
 		}
 	}
+
+
 
 	//if the employee was found, ask for futher input
 	if (found == true) {
@@ -199,8 +220,8 @@ void EditEmployees(vector<Employee> employees, string editOrRemove) {
 				return;
 			}
 		}
-		//greater than 2 because vector size is always 1 more than it should be due to extra line in file
-		else if (editOrRemove == "remove" && employees.size() > 2) {
+		//Check if the user is trying to remove themselves, and prevent it. This prevents the case of the only manager removing themselves, and requires a second manager to remove them.
+		else if (editOrRemove == "remove" && user.getID() != employees[index].getID()) {
 			cout << "Employee vector size: " << employees.size() << endl;
 			//Alternatively, if not editing but removing employees
 			string removeInput;
@@ -223,7 +244,7 @@ void EditEmployees(vector<Employee> employees, string editOrRemove) {
 			}
 		}
 		else {
-			cout << "Invalid operation. Cannot remove the only user." << endl;
+			cout << "Invalid operation. Cannot remove yourself." << endl;
 		}
 		//Once employee is edited or removed, rewrite the file with new data
 		OverwriteSaveFile(employees);
@@ -232,6 +253,8 @@ void EditEmployees(vector<Employee> employees, string editOrRemove) {
 		cout << "Could not find that id." << endl;
 	}
 }
+
+
 
 void ViewSchedule(Employee user) {
 	cout << setw(60) << "Schedule" << endl;
@@ -536,10 +559,10 @@ void MainLoop() {
 				employees.push_back(AddEmployee(employees));
 			}
 			else if (input == "2") {
-				EditEmployees(employees, "remove");
+				EditEmployees(employees, "remove", user);
 			}
 			else if (input == "3") {
-				EditEmployees(employees, "edit");
+				EditEmployees(employees, "edit", user);
 			}
 			else if (input == "4") {
 				ViewEmployees(employees);
