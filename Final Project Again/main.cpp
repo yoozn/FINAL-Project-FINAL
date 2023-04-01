@@ -40,18 +40,16 @@ void SaveEmployeeToFile(Employee employee) {
 
 //Other method used for saving. This one is used for when editing or deleting current employees. This method rewrites the entire file from scratch.
 void OverwriteSaveFile(vector<Employee> employees) {
-	cout << "Employees size entry: " << employees.size();
 	fstream output;
 	output.open("EmployeeData.txt", ios::out);
 	for (int i = 0; i < employees.size(); i++) {
-		output << employees[i].getID() << " " << employees[i].getPassword() << " " << employees[i].getName() << " " << employees[i].getRole() << " " << employees[i].getSalary();
+		output  << employees[i].getID() << " " << employees[i].getPassword() << " " << employees[i].getName() << " " << employees[i].getRole() << " " << employees[i].getSalary();
 		for (int j = 0; j < 7; j++) {
 			output << " " << employees[i].getSchedule(j);
 		}
 		output << endl;
 	}
 	output.close();
-	cout << "Employees size exit: " << employees.size() << endl;
 }
 
 //Method to add new employees. Needs to be changed to only be accessible to managers
@@ -201,7 +199,8 @@ void EditEmployees(vector<Employee> employees, string editOrRemove) {
 				return;
 			}
 		}
-		else if (editOrRemove == "remove" && employees.size() > 1) {
+		//greater than 2 because vector size is always 1 more than it should be due to extra line in file
+		else if (editOrRemove == "remove" && employees.size() > 2) {
 			cout << "Employee vector size: " << employees.size() << endl;
 			//Alternatively, if not editing but removing employees
 			string removeInput;
@@ -224,7 +223,7 @@ void EditEmployees(vector<Employee> employees, string editOrRemove) {
 			}
 		}
 		else {
-			cout << "Invalid operation. Cannot remove only user." << endl;
+			cout << "Invalid operation. Cannot remove the only user." << endl;
 		}
 		//Once employee is edited or removed, rewrite the file with new data
 		OverwriteSaveFile(employees);
@@ -363,7 +362,12 @@ vector<Employee> LoadEmployees() {
 		system("CLS");
 		cout << "I assume that you are the manager of this corporation, please create a password" << endl;
 		role = "Manager";
-		cin >> password;
+		do {
+			cin >> password;
+			if (password.length() < 4) {
+				cout << "Password is too short. Try again." << endl;
+			}
+		} while (password.length() < 4);
 		system("CLS");
 		cout << "Perfect!, What will be your ID?" << endl;
 		cin >> id;
@@ -456,6 +460,7 @@ int Reset(vector<Employee> employees) {
 	cin >> opt;
 	//Get line for the employee data
 	if (opt == "Y" || opt == "y") {
+		LoadingBar("Restarting.", 70);
 		//Opens the file in which the employees are stored in
 		fstream input;
 		input.open("EmployeeData.txt", ofstream::out | ofstream::trunc);
@@ -554,7 +559,6 @@ void MainLoop() {
 			else if (input == "9") {
 				system("CLS");
 				loggedIn = false;
-				LoadingBar("Restarting.", 70);
 				Reset(employees);
 			}
 			else {
