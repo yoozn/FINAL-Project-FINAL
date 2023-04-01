@@ -108,7 +108,7 @@ void ViewEmployees(vector<Employee> employees) {
 	system("CLS");
 	cout << setw(55) << "Information" << endl;
 	cout << setw(10) << "ID" << setw(25) << "Name" << setw(28) << "Password" << setw(24) << "Role" << setw(26) << "Salary/h" << endl;
-	for (int i = 0; i < employees.size() - 1; i++) {
+	for (int i = 0; i < employees.size(); i++) {
 		cout << setw(10) << employees[i].getID() << setw(25) << employees[i].getName() << setw(28) << employees[i].getPassword() << setw(24) << employees[i].getRole() << setw(26) << employees[i].getSalary() << endl;
 	}
 	cout << endl;
@@ -378,7 +378,8 @@ vector<Employee> LoadEmployees() {
 
 		Employee firstEmployee(id, password, name, role, salary);
 		employees.push_back(firstEmployee);
-		SaveEmployeeToFile(firstEmployee);
+		//SaveEmployeeToFile(firstEmployee);
+		OverwriteSaveFile(employees);
 
 	}
 	else {
@@ -404,6 +405,7 @@ vector<Employee> LoadEmployees() {
 			name = firstName + " " + lastName;
 			Employee employee(id, password, name, role, schedule, salary);
 			employees.push_back(employee);
+			OverwriteSaveFile(employees);
 		}
 	}
 	//close file
@@ -533,7 +535,7 @@ void MainLoop() {
 		vector<Employee> employees = LoadEmployees();
 		if (loggedIn == false) {
 			user = login(employees, loggedIn);
-			employees.push_back(user);
+			//employees.push_back(user);
 		}
 		else {
 			//Reupdate the user with updated data every iteration
