@@ -9,19 +9,8 @@
 #include <stdlib.h>
 #include "Employee.h"
 using namespace std;
-/*
-* View Schedule
-* Set schedule
-* Salary
-* Random ID
-* Header file
-* Implementation file
-* formatting setw
-*/
 
 void MainLoop();
-
-//simple class for testing purposes -> probably needs to be expanded with more data fields, functions, and expanded into more inherited classes
 
 bool isIDTaken(vector<Employee> employees, string id) {
 	for (int i = 0; i < employees.size(); i++) {
@@ -101,8 +90,6 @@ Employee AddEmployee(vector<Employee> employees) {
 	return employeeToAdd;
 }
 
-
-//###ID##########NAME##########PASSWORD
 //Loop through the employee array, and print out each employee and their datafields
 void ViewEmployees(vector<Employee> employees) {
 	system("CLS");
